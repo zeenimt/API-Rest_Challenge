@@ -1,24 +1,53 @@
-package com.br.alura.modelo;
+package com.br.alura.modelo.topico;
+
+import com.br.alura.modelo.curso.Curso;
+import com.br.alura.modelo.usuario.Resposta;
+import com.br.alura.modelo.usuario.Usuario;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity(name = "Topico")
+@Table(name = "topicos")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Topico {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	private String titulo;
 	private String mensagem;
 	private LocalDateTime dataCriacao = LocalDateTime.now();
 	private StatusTopico status = StatusTopico.NAO_RESPONDIDO;
+
+	@ManyToOne
+	@JoinColumn
 	private Usuario autor;
+
+	@ManyToOne
 	private Curso curso;
+
+	@OneToMany
+	@PrimaryKeyJoinColumn()
 	private List<Resposta> respostas = new ArrayList<>();
 
 	public Topico(String titulo, String mensagem, Curso curso) {
 		this.titulo = titulo;
 		this.mensagem = mensagem;
 		this.curso = curso;
+	}
+
+	public Topico(DadosCadastroTopico dados) {
+		this.titulo = dados.titulo();
+		this.mensagem = dados.mensagem();
+//		this.autor = dados.autor();
+		this.curso = dados.curso();
 	}
 
 	@Override

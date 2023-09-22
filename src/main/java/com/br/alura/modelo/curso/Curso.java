@@ -1,14 +1,33 @@
-package com.br.alura.modelo;
+package com.br.alura.modelo.curso;
 
+import com.br.alura.modelo.topico.DadosCadastroTopico;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@Entity(name = "Curso")
+@Table(name = "cursos")
+@NoArgsConstructor
 public class Curso {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	private String nome;
 	private String categoria;
+	private Boolean ativo;
 
 	public Curso(String nome, String categoria) {
+		this.ativo = true;
 		this.nome = nome;
 		this.categoria = categoria;
+	}
+
+	public Curso(DadosCadastroCurso dados) {
+		this.ativo = true;
+		this.nome = dados.nome();
+		this.categoria = dados.categoria();
 	}
 	
 	@Override
@@ -60,4 +79,7 @@ public class Curso {
 		this.categoria = categoria;
 	}
 
+	public void excluir() {
+		this.ativo = false;
+	}
 }
